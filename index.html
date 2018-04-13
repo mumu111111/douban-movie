@@ -11,9 +11,15 @@
 
 <body>
     <main>
-        <section></section>
-        <section>2</section>
-        <section>3</section>
+        <section id="top250">
+            <div class="loading"><span class="iconfont "></span></div>
+        </section>
+        <section id="beimei">
+            <div class="loading"><span class="iconfont "></span></div>
+        </section>
+        <section id="search">
+            <div class="loading"><span class="iconfont "></span></div>
+        </section>
     </main>
     <footer>
         <div class="active">
@@ -42,8 +48,10 @@
 
             $('main>section').hide().eq($(this).index()).fadeIn()
         })
-
+        var isLoading= false
         //jsonp请求
+        if(isLoading) return true
+        this.isLoading= true
         $.ajax({
             url: 'http://api.douban.com/v2/movie/top250',
             data: {
@@ -59,7 +67,8 @@
         }).fail(function () {
             console.log('数据异常')
         }).always(function () {
-
+            isLoading= false
+            this.$('main>section').find('.loading').hide()
         })
         //节点创建 
         function createNode(movie) {
@@ -110,11 +119,14 @@
 
         function render(data) {
             data.subjects.forEach(function (movie) {
-
                 $('main>section').eq(0).append(createNode(movie))
             })
-
         }
+
+
+
+
+
     </script>
 </body>
 
