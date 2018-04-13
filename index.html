@@ -48,27 +48,44 @@
 
             $('main>section').hide().eq($(this).index()).fadeIn()
         })
+
+        start()
+        var index= 0
         var isLoading= false
+        var isFinish= false
         //jsonp请求
-        if(isLoading) return true
-        this.isLoading= true
-        $.ajax({
-            url: 'http://api.douban.com/v2/movie/top250',
+      
+        function start(){
+            if(isLoading) return 
+            isLoading= true
+            $('main>section').find('loading').show()
+            $.ajax({
+            url: 'https://api.douban.com/v2/movie/top250',
             data: {
-                start: 0,
+                start: index || 0,
                 count: 20
             },
             dataType: 'jsonp'
         }).done(function (ret) {
-            console.log('ret')
             console.log(ret)
             render(ret)
-
+            index+= 20
+            if(index >= ret.total){
+                isFinish = true
+            }
         }).fail(function () {
             console.log('数据异常')
         }).always(function () {
             isLoading= false
-            this.$('main>section').find('.loading').hide()
+            $('main>section').find('.loading').hide()
+        })
+        }
+        //懒加载
+        $('main>section').on('scroll', function(){
+
+            if(!isFinish && $('main>section').height()- 10 <= $('mian').height()+ $('main>section').scrollTop() ){
+            start()
+        }
         })
         //节点创建 
         function createNode(movie) {
@@ -119,7 +136,7 @@
 
         function render(data) {
             data.subjects.forEach(function (movie) {
-                $('main>section').eq(0).append(createNode(movie))
+                $('main>section').eq(0).prepend(createNode(movie))
             })
         }
 
