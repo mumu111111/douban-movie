@@ -22,17 +22,17 @@
         </section>
         <section id="search">
                 <div class="search-area">
-                        <input type="text" placeholder="搜索电影"><span class="button"> 搜索</span>
+                        <input type="text" placeholder="搜索电影"><span class="button">搜索</span>
                 </div>
-                <div class="search-result">
+                <div class="container"></div>
+                <!-- <div class="search-result"> -->
                         <div class="loading"><span class="iconfont icon-loading"></span></div>
-                </div>
+                <!-- </div> -->
         </section>
     </main>
     <footer>
         <div class="active">
             <span class="iconfont icon-paihang">
-
             </span>
             <span>top250</span>
         </div>
@@ -49,238 +49,12 @@
     </footer>
 
     <script src="./vendors/jquery.min.js"></script>
-
-    <script>
-        var Top250page = {
-            init: function () {
-                this.$container = $('#top250')//视口
-                this.$content = this.$container.find('.container')//内容
-                this.index = 0;
-                this.isLoading = false
-                this.isFinish = false
-                this.bind()
-                this.start() //一开始就请求一次
-            },
-            bind: function () {
-                var _this = this
-                //懒加载
-                console.log(_this)
-                this.$container.scroll(function () {
-                    if (!_this.isFinish && common.isToEnd(_this.$container, _this.$content)) {
-                        _this.start()
-                        console.log(2)
-                    }
-                })
-            },
-            start: function(){
-                var _this= this
-                this.getData(function(data){
-                    _this.render(data)
-                })
-            },
-            //jsonp请求
-            getData: function (callback) {
-                var _this= this
-                if (_this.isLoading) return
-                _this.isLoading = true
-                _this.$container.find('.loading').show()
-                $.ajax({
-                    url: 'https://api.douban.com/v2/movie/top250',
-                    data: {
-                        start: this.index || 0,
-                        // count: 20
-                    },
-                    dataType: 'jsonp'
-                }).done(function (ret) {
-                    console.log(ret)
-                    callback && callback(ret)
-                    _this.index += 20
-                    if (_this.index >= ret.total) {
-                        _this.isFinish = true
-                    }
-                }).fail(function () {
-                    console.log('数据异常')
-                }).always(function () {
-                    _this.isLoading = false
-                    _this.$container.find('.loading').hide()
-                })
-            },
-            //渲染
-            render: function (data) {
-                var _this = this
-                data.subjects.forEach(function (movie) {
-                    _this.$content.append(common.createNode(movie))
-                })
-            }
-        }
-        var UsBoxPage = {
-            init: function () {
-                this.$container = $('#beimei')//视口
-                this.$content = this.$container.find('.container')//内容
-                this.start() //一开始就请求一次
-            },
-            start: function(){
-                var _this= this
-                this.getData(function(data){
-                    _this.render(data)
-                })
-            },
-            //jsonp请求
-            getData: function (callback) {
-                var _this= this
-                _this.$container.find('.loading').show()
-                $.ajax({
-                    url: 'https://api.douban.com/v2/movie/us_box',
-                    dataType: 'jsonp'
-                }).done(function (ret) {
-                    console.log('ret')
-                    
-                    console.log(ret)
-                    callback && callback(ret)
-                }).fail(function () {
-                    console.log('数据异常')
-                }).always(function () {
-                    _this.$container.find('.loading').hide()
-                })
-            },
-            //渲染
-            render: function (data) {
-                var _this = this
-                data.subjects.forEach(function (item) {
-                    _this.$content.append(common.createNode(item.subject))
-                })
-            }
-        }
-        
-
-        var SearchPage = {
-            init: function () {
-                this.$container = $('#search')
-                this.$input = this.$container.find('input')
-                this.$btn = this.$container.find('.button')
-                this.$content = this.$container.find('.search-result')
-                this.bind()
-            },
-            bind: function(){
-                var _this= this
-                console.log(1)
-                this.$btn.on('click',function(){
-                    _this.getData(_this.$input.val(), function(data){
-                        console.log(2)
-                        console.log(data)
-
-                        _this.render(data)
-                        console.log(3)
-                    })
-                })
-            },
-            //jsonp请求
-            getData: function (keyword, callback) {
-                var _this= this
-                console.log(4)
-                _this.$container.find('.loading').show()
-                $.ajax({
-                    url: 'https://api.douban.com/v2/movie/search',
-                    data:{
-                        q: keyword 
-                    },
-                    dataType: 'jsonp'
-                }).done(function (ret) {
-                    console.log(5)
-                    console.log('ret')
-                    console.log(ret)
-                    callback && callback(ret)
-                }).fail(function () {
-                    console.log('数据异常')
-                }).always(function () {
-                    _this.$container.find('.loading').hide()
-                })
-            },
-            //渲染
-            render: function (data) {
-                var _this = this
-                data.subjects.forEach(function (item) {
-                    _this.$content.append(common.createNode(item))
-                })
-            }
-        }
-        
-
-
-
-
-
-
-
-        var common = {
-            isToEnd: function($viewport, $content){
-                return $viewport.height() + $viewport.scrollTop() +10 > $content.height()
-              },
-            //节点创建 
-            createNode: function (movie) {
-                var template = `
-                <div class="item">
-                    <a href="#">
-                        <div class="cover">
-                            <img src="" alt="">
-                        </div>
-                        <div class="detail">
-                            <h2></h2>
-                            <div class="extra"><span class="score"></span>分 / <span class="collect"></span>收藏</div>
-                            <div class="extra"><span class="year"></span> / <span class="type"></span></div>
-                            <div class="extra">导演: <span class="director"></span></div>
-                            <div class="extra">主演: <span class="actor"></span></div>
-                        </div>
-                    </a>
-                </div>
-        `
-                var $node = $(template)
-                $node.find('a').attr('href', movie.alt)
-                $node.find('.cover img').attr('src', movie.images.medium)
-                $node.find('.detail h2').text(movie.title)
-                $node.find('.score').text(movie.rating.average)
-                $node.find('.collect').text(movie.collect_count)
-                $node.find('.year').text(movie.year)
-                $node.find('.type').text(movie.genres.join(' / '))
-                $node.find('.director').text(function () {
-                    var directorsArr = []
-                    movie.directors.forEach(function (item) {
-                        directorsArr.push(item.name)
-                    })
-                    return directorsArr.join('、')
-                })
-                $node.find('.actor').text(function () {
-                    var actorArr = []
-                    movie.casts.forEach(function (item) {
-                        actorArr.push(item.name)
-                    })
-                    return actorArr.join('、')
-                })
-                return $node
-            }
-        }
-
-        
-        var App = {
-            init: function(){
-                this.bind()
-                Top250page.init()
-                UsBoxPage.init()
-                SearchPage.init()
-            },
-            //tab切换
-            bind: function(){
-                $('footer>div').on('click', function () {
-                $(this).addClass('active')
-                    .siblings().removeClass('active')
-                $('main>section').hide().eq($(this).index())
-                    .fadeIn()
-            })
-            }
-        }
-        App.init()
-
-    </script>
+    <script src="./js/top250.js"></script>
+    <script src="./js/search.js"></script>
+    <script src="./js/beimei.js"></script>
+    <script src="./js/common.js"></script> 
+    <script src="./js/app.js"></script> 
+    
 </body>
 
 </html>
