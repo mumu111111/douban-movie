@@ -1,92 +1,120 @@
-*{
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-html, body{
-    height: 100%;
-}
-body{
-    position: relative;
-    font-size: 12px;
-    line-height: 1.2;
-}
-a{
+  }
+  a {
     text-decoration: none;
     color: #333;
-}
-main{
-    height: calc(100vh - 45px);
+  }
+  html,body,main{
+    height: 100%;
+    position: relative;
+  }
+  body{
+    font-size: 12px;
+    line-height: 1.2;
+  }
+  main>section {
+    height: calc(100% - 45px);
     padding: 10px;
-    background: #F1EDED;
+    background: #fff;
+    overflow: auto;
     -webkit-overflow-scrolling: touch; /*ios 上增加弹性*/
-    overflow: scroll;
-}
-main > section{
+  }
+  main>section{
     display: none;
-}
-main section:first-child{
+  }
+  main section:first-child{
     display: block;
-}
-section .item{
+  }
+  .item {
     border-bottom: 1px solid #ccc;
     padding-bottom: 10px;
     padding-top: 10px;
-}
-section .item > a{
+  }
+  .item>a{
     display: block;
     display: flex;
-}
-section .item .cover,
-section .item .cover img{
+  }
+  .item .cover,
+  .item .cover img{
     width: 70px;
-}
-section .item  .detail{
+  }
+  .item .detail {
     flex: 1;
     padding-left: 10px;
-}
-section .item  .detail h2{
+  }
+  .item .detail h2{
     font-size: 16px;
-}
-section .item .detail .extra{
+  }
+  .item .detail .extra{
     color: #999;
     margin-top: 4px;
-}
-section .item .detail .score{
+  }
+  .item .detail .score{
     color: #FF5722;
-}
-section .loading{
+  }
+  .loading {
     text-align: center;
     padding-top: 10px;
     display: none;
-}  
-section .loading .iconfont{
+  }
+  
+  @keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg);  }
+  }
+  #search {
+    height: calc(100% - 45px);
+  }
+  section .search-area{
+    color: #333;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+  }
+  section .search-area input {
+    width: calc(100% - 50px);
+    padding: 8px;
+    background-color: #eee;
+    border: none;
+    border-radius: 2px;
+    box-shadow: none;
+    outline: none;
+  }
+  section .search-area .button{
+    position: absolute;
+    right: 0;
+    padding: 8px 10px;
+    background: #FF5722;
+    color: #fff;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  .loading .iconfont{
     display: inline-block;
     animation: 1s rotate linear infinite;
-} 
-@keyframes rotate{
-    0%{ transform: rotate(0deg) }
-    100%{ transform: rotate(0deg)}
-}
-footer{
-    display: absolute;
+  }
+  footer {
+    position: absolute;
     bottom: 0;
     height: 45px;
     width: 100%;
-    display: flex;
-    background-color: #fff;
     border-top: 1px solid #ccc;
-}
-footer>div{
+    background-color: #fff;
+    display: flex;
+  }
+  footer>div {
     flex: 1;
+    font-size: 12px;
     text-align: center;
-    padding-top: 6px;
     color: #666;
-    cursor: pointer;
-}
-footer>div>span{
-    display: block;
-}
-footer .active{
+    padding-top: 6px;
+  }
+  footer .active{
     color: #FF5722;
-}
+  }
+  footer>div>span{
+    display: block;
+  } 

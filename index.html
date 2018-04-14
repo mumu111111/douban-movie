@@ -7,34 +7,42 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>豆瓣电影</title>
     <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_628256_dj8us0686avsfw29.css">
 </head>
 
 <body>
     <main>
         <section id="top250">
             <div class="container"></div>
-            <div class="loading"><span class="iconfont ">vv</span></div>
+            <div class="loading"><span class="iconfont icon-loading"></span></div>
         </section>
         <section id="beimei">
-            <div class="loading"><span class="iconfont "></span></div>
+            <div class="container"></div>
+            <div class="loading"><span class="iconfont icon-loading"></span></div>
         </section>
         <section id="search">
-            <div class="loading"><span class="iconfont "></span></div>
+                <div class="search-area">
+                        <input type="text" placeholder="搜索电影"><span class="button"> 搜索</span>
+                </div>
+                <div class="search-result">
+                        <div class="loading"><span class="iconfont icon-loading"></span></div>
+                </div>
         </section>
     </main>
     <footer>
         <div class="active">
-            <span class="icon">x
+            <span class="iconfont icon-paihang">
+
             </span>
             <span>top250</span>
         </div>
         <div>
-            <span class="icon">x
+            <span class="iconfont icon-beimei">
             </span>
             <span>北美</span>
         </div>
         <div>
-            <span class="icon">x
+            <span class="iconfont icon-search">
             </span>
             <span>搜索</span>
         </div>
@@ -56,9 +64,12 @@
             bind: function () {
                 var _this = this
                 //懒加载
-                this.$container.on('scroll', function () {
-                    if (!_this.isFinish && common.isToEnd($container, $content)) {
+                console.log(1)
+                console.log(_this)
+                this.$container.scroll(function () {
+                    if (!_this.isFinish && common.isToEnd(_this.$container, _this.$content)) {
                         _this.start()
+                        console.log(2)
                     }
                 })
             },
@@ -74,6 +85,7 @@
                 if (_this.isLoading) return
                 _this.isLoading = true
                 _this.$container.find('.loading').show()
+console.log(44)
                 $.ajax({
                     url: 'https://api.douban.com/v2/movie/top250',
                     data: {
@@ -105,9 +117,9 @@
         }
 
         var common = {
-            isToEnd: function ($viewport, $conent) {
-                return $viewport.height() + $viewport.scrollTop() > $content.height() - 10
-            },
+            isToEnd: function($viewport, $content){
+                return $viewport.height() + $viewport.scrollTop() +10 > $content.height()
+              },
             //节点创建 
             createNode: function (movie) {
                 var template = `
