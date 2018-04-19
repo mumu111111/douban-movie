@@ -1,52 +1,52 @@
-var SearchPage = {
-    init: function () {
+import common from './common.js'
+class SearchPage extends common{
+    constructor(wrap) {
+        super(wrap)
         this.isLoading = false
-        this.$container = $('#search')
-        this.$input = this.$container.find('input')
-        this.$btn = this.$container.find('.button')
-        this.$content = this.$container.find('.container')
+        this.$input = this.wrap.find('input')
+        this.$btn = this.wrap.find('.button')
+        this.$content = this.wrap.find('.container')      
+    }
+    init() {
         this.bind()
-    },
-    bind: function(){
-        var _this= this
-        this.$btn.on('click',function(){
-            _this.$content.empty()
-            var value= _this.$input.val()
+    }
+    bind(){
+        this.$btn.on('click',()=>{
+            this.$content.empty()
+            var value= this.$input.val()
             if(value === '') return 
-            _this.getData(value, function(data){
-                _this.render(data)
+            this.getData(value, (data)=>{
+                this.render(data)
             })
         })
-    },
+    }
     //jsonp请求
-    getData: function (keyword, callback) {
-        var _this= this
-        if (_this.isLoading) return
-        _this.isLoading = true
-        _this.$container.find('.loading').show()
+    getData(keyword, callback) {
+        if (this.isLoading) return
+        this.isLoading = true
+        this.wrap.find('.loading').show()
         $.ajax({
             url: 'https://api.douban.com/v2/movie/search',
             data:{
                 q: keyword 
             },
             dataType: 'jsonp'
-        }).done(function (ret) {
+        }).done((ret)=> {
             console.log('ret')
             console.log(ret)
             callback && callback(ret)
-        }).fail(function () {
+        }).fail(()=> {
             console.log('数据异常')
-        }).always(function () {
-            _this.isLoading= false
-            _this.$container.find('.loading').hide()
+        }).always(()=> {
+            this.isLoading= false
+            this.wrap.find('.loading').hide()
         })
-    },
+    }
     //渲染
-    render: function (data) {
-        var _this = this
-        data.subjects.forEach(function (item) {
-            _this.$content.append(common.createNode(item))
+    render(data) {
+        data.subjects.forEach((item)=> {
+            this.$content.append(this.createNode(item))
         })
     }
 }
-
+export default SearchPage
