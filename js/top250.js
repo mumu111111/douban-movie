@@ -1,3 +1,4 @@
+import $ from '../vendors/jquery.min.js'
 import common from './common.js'
 
 class Top250page extends common{

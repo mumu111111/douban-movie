@@ -1,3 +1,5 @@
+import $ from '../vendors/jquery.min.js'
+
 class Common {
     constructor(wrap) {
         this.wrap= $(wrap)

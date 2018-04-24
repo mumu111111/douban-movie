@@ -1,3 +1,4 @@
+import $ from '../vendors/jquery.min.js'
 import common from './common.js'
 
 class UsBoxPage extends common{
@@ -7,7 +8,7 @@ class UsBoxPage extends common{
     }
     init() {
         this.start() //一开始就请求一次
-        console.dir(UsBoxPage)
+        // console.dir(UsBoxPage)
     }
     start(){
         this.getData((data)=>{

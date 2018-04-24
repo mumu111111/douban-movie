@@ -115,7 +115,7 @@
   footer .active{
     color: #FF5722;
   }
-  footer>div>span{
+  footer > div > span{
     display: block;
     cursor: pointer;
   } 

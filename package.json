@@ -8,5 +8,11 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "http": "0.0.0",
+    "parcel-bundler": "^1.7.1",
+    "s": "^0.1.1",
+    "sass": "^1.2.1"
+  }
 }
