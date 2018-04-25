@@ -144,13 +144,13 @@ module.exports = reloadCSS;
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":11}],7:[function(require,module,exports) {
+},{"_css_loader":11}],6:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":11}],6:[function(require,module,exports) {
+},{"_css_loader":11}],7:[function(require,module,exports) {
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /*! jQuery v3.3.1 | (c) JS Foundation and other contributors | jquery.org/license */
@@ -2503,7 +2503,7 @@ var Common = function () {
 }();
 
 exports.default = Common;
-},{"../vendors/jquery.min.js":6}],8:[function(require,module,exports) {
+},{"../vendors/jquery.min.js":7}],8:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2620,7 +2620,7 @@ var Top250page = function (_common) {
 }(_common3.default);
 
 exports.default = Top250page;
-},{"../vendors/jquery.min.js":6,"./common.js":12}],9:[function(require,module,exports) {
+},{"../vendors/jquery.min.js":7,"./common.js":12}],9:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2711,7 +2711,7 @@ var UsBoxPage = function (_common) {
 }(_common3.default);
 
 exports.default = UsBoxPage;
-},{"../vendors/jquery.min.js":6,"./common.js":12}],10:[function(require,module,exports) {
+},{"../vendors/jquery.min.js":7,"./common.js":12}],10:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2814,7 +2814,7 @@ var SearchPage = function (_common) {
 }(_common3.default);
 
 exports.default = SearchPage;
-},{"../vendors/jquery.min.js":6,"./common.js":12}],4:[function(require,module,exports) {
+},{"../vendors/jquery.min.js":7,"./common.js":12}],4:[function(require,module,exports) {
 'use strict';
 
 require('../css/font.css');
@@ -2851,7 +2851,7 @@ var search = new _search2.default('#search');
 top.init();
 beimei.init();
 search.init();
-},{"../css/font.css":5,"../css/index.css":7,"../vendors/jquery.min.js":6,"./top250.js":8,"./beimei.js":9,"./search.js":10}],14:[function(require,module,exports) {
+},{"../css/font.css":5,"../css/index.css":6,"../vendors/jquery.min.js":7,"./top250.js":8,"./beimei.js":9,"./search.js":10}],14:[function(require,module,exports) {
 
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -2881,7 +2881,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '51953' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '53753' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
