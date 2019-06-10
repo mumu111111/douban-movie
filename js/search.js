@@ -24,13 +24,11 @@ class SearchPage extends common{
             })
         })
         this.$input.on('keyup',(e)=>{
-            console.log(e)
             this.$content.empty()
             var value= this.$input.val()
             if(e.key === 'Enter'){
                 if(value === '') {this.$content.text('要输入搜索内容啊');  return} 
                 this.getData(value,(result)=>{
-                    console.log('dd',result)
                     this.render(result.data)
                 })
             }
@@ -69,8 +67,6 @@ class SearchPage extends common{
            
             dataType: 'jsonp'
         }).done((ret)=> {
-            console.log('ret')
-            console.log(ret)
             callback && callback(ret)
         }).fail(()=> {
             console.log('数据异常')

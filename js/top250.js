@@ -20,7 +20,6 @@ class Top250page extends common{
         this.wrap.scroll(()=> {
             if (!this.isFinish && this.isToEnd(this.wrap, this.$content)) {
                 this.start()
-                console.log(2)
             }
         })
     }
@@ -78,7 +77,6 @@ class Top250page extends common{
     }
     //渲染
     render(data) {
-        console.log(data)
         data.forEach((item,index)=> {
             this.$content.append(this.createNode(item, index+1))
         })

@@ -8,7 +8,6 @@ class UsBoxPage extends common{
     }
     init() {
         this.start() //一开始就请求一次
-        // console.dir(UsBoxPage)
     }
     start(){
         this.getData((result)=>{
@@ -40,7 +39,6 @@ class UsBoxPage extends common{
             page: this.page,
             dataType: 'jsonp'
         }).done((ret)=> {
-            console.log('user',ret)
             callback && callback(ret)
         }).fail(()=> {
             console.log('数据异常')
