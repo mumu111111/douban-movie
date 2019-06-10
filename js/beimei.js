@@ -19,7 +19,7 @@ class UsBoxPage extends common{
     getData(callback) {
         this.wrap.find('.loading').show()
         $.ajax({
-            url: 'https://api.douban.com/v2/movie/us_box',
+            url: 'https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc&page=1',
             dataType: 'jsonp'
         }).done((ret)=> {
             console.log('ret')

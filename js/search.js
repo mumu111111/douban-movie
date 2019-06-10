@@ -27,7 +27,7 @@ class SearchPage extends common{
         this.isLoading = true
         this.wrap.find('.loading').show()
         $.ajax({
-            url: 'https://api.douban.com/v2/movie/search',
+            url: 'https://api.github.com/search/repositories?q=keyword+language:javascript&sort=stars&order=desc&page=1',
             data:{
                 q: keyword 
             },

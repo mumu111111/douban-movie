@@ -107,7 +107,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],11:[function(require,module,exports) {
+},{}],12:[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -138,19 +138,19 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":13}],5:[function(require,module,exports) {
+},{"./bundle-url":13}],3:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":11}],6:[function(require,module,exports) {
+},{"_css_loader":12}],4:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":11}],7:[function(require,module,exports) {
+},{"_css_loader":12}],6:[function(require,module,exports) {
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /*! jQuery v3.3.1 | (c) JS Foundation and other contributors | jquery.org/license */
@@ -2440,7 +2440,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return e.$ === w && (e.$ = Kt), t && e.jQuery === w && (e.jQuery = Jt), w;
   }, t || (e.jQuery = e.$ = w), w;
 });
-},{}],12:[function(require,module,exports) {
+},{}],14:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2503,7 +2503,7 @@ var Common = function () {
 }();
 
 exports.default = Common;
-},{"../vendors/jquery.min.js":7}],8:[function(require,module,exports) {
+},{"../vendors/jquery.min.js":6}],5:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2537,6 +2537,7 @@ var Top250page = function (_common) {
         var _this = _possibleConstructorReturn(this, (Top250page.__proto__ || Object.getPrototypeOf(Top250page)).call(this, wrap));
 
         _this.index = 0;
+        _this.page = 1;
         _this.count = 10;
         _this.isLoading = false;
         _this.isFinish = false;
@@ -2568,9 +2569,23 @@ var Top250page = function (_common) {
         value: function start() {
             var _this3 = this;
 
-            this.getData(function (data) {
-                _this3.render(data);
+            this.getData(function (result) {
+                _this3.render(result.data.items);
+                _this3.page++;
             });
+        }
+    }, {
+        key: 'createNode',
+        value: function createNode(subject, index) {
+            var $node = (0, _jqueryMin2.default)('<div class="item">\n        <a href="https://github.com/TryGhost/Ghost">\n          <div class="order"><span>1</span></div>\n          <div class="detail">\n            <h2>Ghost </h2>\n            <div class="description">Knockout makes it easier to create rich, responsive UIs with JavaScript</div>\n            <div class="extra"><span class="star-count">4196</span> star</div>  \n         </div>\n       </a>\n      </div> ');
+
+            $node.find('.order span').text(index);
+            $node.find('a').attr('href', subject.html_url);
+            $node.find('.detail h2').text(subject.name);
+            $node.find('.detail .description').text(subject.description);
+            $node.find('.detail .collection').text(subject.collect_count);
+            $node.find('.detail .star-count').text(subject.stargazers_count);
+            return $node;
         }
         //jsonp请求
 
@@ -2583,17 +2598,15 @@ var Top250page = function (_common) {
             this.isLoading = true;
             this.wrap.find('.loading').show();
             _jqueryMin2.default.ajax({
-                url: 'https://api.douban.com/v2/movie/top250',
+                url: 'https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc',
                 data: {
-                    start: this.index || 0,
-                    count: this.count
+                    page: this.page
                 },
                 dataType: 'jsonp'
             }).done(function (ret) {
-                console.log(ret);
                 callback && callback(ret);
                 _this4.index += 20;
-                if (_this4.index >= ret.total) {
+                if (_this4.index >= ret.total_count) {
                     _this4.isFinish = true;
                 }
             }).fail(function () {
@@ -2610,8 +2623,9 @@ var Top250page = function (_common) {
         value: function render(data) {
             var _this5 = this;
 
-            data.subjects.forEach(function (movie) {
-                _this5.$content.append(_this5.createNode(movie));
+            console.log(data);
+            data.forEach(function (item, index) {
+                _this5.$content.append(_this5.createNode(item, index + 1));
             });
         }
     }]);
@@ -2620,7 +2634,7 @@ var Top250page = function (_common) {
 }(_common3.default);
 
 exports.default = Top250page;
-},{"../vendors/jquery.min.js":7,"./common.js":12}],9:[function(require,module,exports) {
+},{"../vendors/jquery.min.js":6,"./common.js":14}],7:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2681,7 +2695,7 @@ var UsBoxPage = function (_common) {
 
             this.wrap.find('.loading').show();
             _jqueryMin2.default.ajax({
-                url: 'https://api.douban.com/v2/movie/us_box',
+                url: 'https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc&page=1',
                 dataType: 'jsonp'
             }).done(function (ret) {
                 console.log('ret');
@@ -2711,7 +2725,7 @@ var UsBoxPage = function (_common) {
 }(_common3.default);
 
 exports.default = UsBoxPage;
-},{"../vendors/jquery.min.js":7,"./common.js":12}],10:[function(require,module,exports) {
+},{"../vendors/jquery.min.js":6,"./common.js":14}],8:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2781,7 +2795,7 @@ var SearchPage = function (_common) {
             this.isLoading = true;
             this.wrap.find('.loading').show();
             _jqueryMin2.default.ajax({
-                url: 'https://api.douban.com/v2/movie/search',
+                url: 'https://api.github.com/search/repositories?q=keyword+language:javascript&sort=stars&order=desc&page=1',
                 data: {
                     q: keyword
                 },
@@ -2814,7 +2828,7 @@ var SearchPage = function (_common) {
 }(_common3.default);
 
 exports.default = SearchPage;
-},{"../vendors/jquery.min.js":7,"./common.js":12}],4:[function(require,module,exports) {
+},{"../vendors/jquery.min.js":6,"./common.js":14}],2:[function(require,module,exports) {
 'use strict';
 
 require('../css/font.css');
@@ -2851,7 +2865,7 @@ var search = new _search2.default('#search');
 top.init();
 beimei.init();
 search.init();
-},{"../css/font.css":5,"../css/index.css":6,"../vendors/jquery.min.js":7,"./top250.js":8,"./beimei.js":9,"./search.js":10}],14:[function(require,module,exports) {
+},{"../css/font.css":3,"../css/index.css":4,"../vendors/jquery.min.js":6,"./top250.js":5,"./beimei.js":7,"./search.js":8}],15:[function(require,module,exports) {
 
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -2881,7 +2895,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '53753' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '51431' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -3020,5 +3034,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[14,4])
+},{}]},{},[15,2])
 //# sourceMappingURL=/app.d60da7eb.map

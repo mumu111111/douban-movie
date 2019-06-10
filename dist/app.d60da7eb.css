@@ -63,6 +63,11 @@
     display: block;
     display: flex;
   }
+  .item .order span{
+    padding: 0 4px;
+    color: #fff;
+    background: green;
+  }
   .item .cover,
   .item .cover img{
     width: 70px;
