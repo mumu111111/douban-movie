@@ -9,7 +9,7 @@ import Search from './search.js'
     $('footer>div').on('click', function(){
         $(this).addClass('active')
             .siblings().removeClass('active')
-        $('main>section').hide().eq($(this).index()).fadeIn()
+        $('main>section').fadeOut().eq($(this).index()).fadeIn()
     })
 
     let top= new Top('#top250')

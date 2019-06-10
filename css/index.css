@@ -39,6 +39,10 @@
     display: block;
     display: flex;
   }
+  .item .order{
+    display: flex;
+    align-items: center;
+  }
   .item .order span{
     padding: 0 4px;
     color: #fff;
