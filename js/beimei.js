@@ -11,20 +11,36 @@ class UsBoxPage extends common{
         // console.dir(UsBoxPage)
     }
     start(){
-        this.getData((data)=>{
-            this.render(data)
+        this.getData((result)=>{
+            this.render(result.data)
+            this.page++
         })
     }
+    createNode(subject,index){
+        var $node = $(`<div class="item">
+            <a href="https://github.com/TryGhost/Ghost">
+                <div class="cover"><img src="" alt=""></div> 
+                <div class="detail">
+                    <h2>Ghost </h2>
+                </div>
+            </a>
+            </div> `)
+        
+            $node.find('.cover img').attr('src', subject.avatar_url )
+            $node.find('a').attr('href', subject.html_url )    
+            $node.find('.detail h2').text(subject.login )  
+        return $node
+    }
+    
     //jsonp请求
     getData(callback) {
         this.wrap.find('.loading').show()
         $.ajax({
-            url: 'https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc&page=1',
+            url: 'https://api.github.com/search/users?q=followers:>1000+location:china+language:javascript',
+            page: this.page,
             dataType: 'jsonp'
         }).done((ret)=> {
-            console.log('ret')
-            
-            console.log(ret)
+            console.log('user',ret)
             callback && callback(ret)
         }).fail(()=> {
             console.log('数据异常')
@@ -34,8 +50,8 @@ class UsBoxPage extends common{
     }
     //渲染
     render(data) {
-        data.subjects.forEach((item)=> {
-            this.$content.append(this.createNode(item.subject))
+        data.items.forEach((item,index)=> {
+            this.$content.append(this.createNode(item,index+1))
         })
     }
 }

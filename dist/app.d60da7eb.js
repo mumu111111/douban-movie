@@ -107,7 +107,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],12:[function(require,module,exports) {
+},{}],10:[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -144,13 +144,13 @@ module.exports = reloadCSS;
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":12}],4:[function(require,module,exports) {
+},{"_css_loader":10}],4:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":12}],6:[function(require,module,exports) {
+},{"_css_loader":10}],8:[function(require,module,exports) {
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /*! jQuery v3.3.1 | (c) JS Foundation and other contributors | jquery.org/license */
@@ -2440,7 +2440,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return e.$ === w && (e.$ = Kt), t && e.jQuery === w && (e.jQuery = Jt), w;
   }, t || (e.jQuery = e.$ = w), w;
 });
-},{}],14:[function(require,module,exports) {
+},{}],11:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2469,41 +2469,13 @@ var Common = function () {
         value: function isToEnd($viewport, $content) {
             return $viewport.height() + $viewport.scrollTop() + 10 > $content.height();
         }
-    }, {
-        key: 'createNode',
-        value: function createNode(movie) {
-            var template = '\n        <div class="item">\n            <a href="#">\n                <div class="cover">\n                    <img src="" alt="">\n                </div>\n                <div class="detail">\n                    <h2></h2>\n                    <div class="extra"><span class="score"></span>\u5206 / <span class="collect"></span>\u6536\u85CF</div>\n                    <div class="extra"><span class="year"></span> / <span class="type"></span></div>\n                    <div class="extra">\u5BFC\u6F14: <span class="director"></span></div>\n                    <div class="extra">\u4E3B\u6F14: <span class="actor"></span></div>\n                </div>\n            </a>\n        </div>\n        ';
-            var $node = (0, _jqueryMin2.default)(template);
-            $node.find('a').attr('href', movie.alt);
-            $node.find('.cover img').attr('src', movie.images.medium);
-            $node.find('.detail h2').text(movie.title);
-            $node.find('.score').text(movie.rating.average);
-            $node.find('.collect').text(movie.collect_count);
-            $node.find('.year').text(movie.year);
-            $node.find('.type').text(movie.genres.join(' / '));
-            $node.find('.director').text(function () {
-                var directorsArr = [];
-                movie.directors.forEach(function (item) {
-                    directorsArr.push(item.name);
-                });
-                return directorsArr.join('、');
-            });
-            $node.find('.actor').text(function () {
-                var actorArr = [];
-                movie.casts.forEach(function (item) {
-                    actorArr.push(item.name);
-                });
-                return actorArr.join('、');
-            });
-            return $node;
-        }
     }]);
 
     return Common;
 }();
 
 exports.default = Common;
-},{"../vendors/jquery.min.js":6}],5:[function(require,module,exports) {
+},{"../vendors/jquery.min.js":8}],5:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2634,7 +2606,7 @@ var Top250page = function (_common) {
 }(_common3.default);
 
 exports.default = Top250page;
-},{"../vendors/jquery.min.js":6,"./common.js":14}],7:[function(require,module,exports) {
+},{"../vendors/jquery.min.js":8,"./common.js":11}],6:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2682,10 +2654,22 @@ var UsBoxPage = function (_common) {
         value: function start() {
             var _this2 = this;
 
-            this.getData(function (data) {
-                _this2.render(data);
+            this.getData(function (result) {
+                _this2.render(result.data);
+                _this2.page++;
             });
         }
+    }, {
+        key: 'createNode',
+        value: function createNode(subject, index) {
+            var $node = (0, _jqueryMin2.default)('<div class="item">\n            <a href="https://github.com/TryGhost/Ghost">\n                <div class="cover"><img src="" alt=""></div> \n                <div class="detail">\n                    <h2>Ghost </h2>\n                </div>\n            </a>\n            </div> ');
+
+            $node.find('.cover img').attr('src', subject.avatar_url);
+            $node.find('a').attr('href', subject.html_url);
+            $node.find('.detail h2').text(subject.login);
+            return $node;
+        }
+
         //jsonp请求
 
     }, {
@@ -2695,12 +2679,11 @@ var UsBoxPage = function (_common) {
 
             this.wrap.find('.loading').show();
             _jqueryMin2.default.ajax({
-                url: 'https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc&page=1',
+                url: 'https://api.github.com/search/users?q=followers:>1000+location:china+language:javascript',
+                page: this.page,
                 dataType: 'jsonp'
             }).done(function (ret) {
-                console.log('ret');
-
-                console.log(ret);
+                console.log('user', ret);
                 callback && callback(ret);
             }).fail(function () {
                 console.log('数据异常');
@@ -2715,8 +2698,8 @@ var UsBoxPage = function (_common) {
         value: function render(data) {
             var _this4 = this;
 
-            data.subjects.forEach(function (item) {
-                _this4.$content.append(_this4.createNode(item.subject));
+            data.items.forEach(function (item, index) {
+                _this4.$content.append(_this4.createNode(item, index + 1));
             });
         }
     }]);
@@ -2725,7 +2708,7 @@ var UsBoxPage = function (_common) {
 }(_common3.default);
 
 exports.default = UsBoxPage;
-},{"../vendors/jquery.min.js":6,"./common.js":14}],8:[function(require,module,exports) {
+},{"../vendors/jquery.min.js":8,"./common.js":11}],7:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2828,7 +2811,7 @@ var SearchPage = function (_common) {
 }(_common3.default);
 
 exports.default = SearchPage;
-},{"../vendors/jquery.min.js":6,"./common.js":14}],2:[function(require,module,exports) {
+},{"../vendors/jquery.min.js":8,"./common.js":11}],2:[function(require,module,exports) {
 'use strict';
 
 require('../css/font.css');
@@ -2865,7 +2848,7 @@ var search = new _search2.default('#search');
 top.init();
 beimei.init();
 search.init();
-},{"../css/font.css":3,"../css/index.css":4,"../vendors/jquery.min.js":6,"./top250.js":5,"./beimei.js":7,"./search.js":8}],15:[function(require,module,exports) {
+},{"../css/font.css":3,"../css/index.css":4,"../vendors/jquery.min.js":8,"./top250.js":5,"./beimei.js":6,"./search.js":7}],14:[function(require,module,exports) {
 
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -2895,7 +2878,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '51431' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '53777' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -3034,5 +3017,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[15,2])
+},{}]},{},[14,2])
 //# sourceMappingURL=/app.d60da7eb.map
