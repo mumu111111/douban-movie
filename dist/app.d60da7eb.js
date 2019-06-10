@@ -77,7 +77,7 @@ parcelRequire = (function (modules, cache, entry) {
 
   // Override the current require with this new one
   return newRequire;
-})({13:[function(require,module,exports) {
+})({14:[function(require,module,exports) {
 var bundleURL = null;
 function getBundleURLCached() {
   if (!bundleURL) {
@@ -107,7 +107,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],10:[function(require,module,exports) {
+},{}],12:[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -138,19 +138,19 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":13}],3:[function(require,module,exports) {
+},{"./bundle-url":14}],5:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":10}],4:[function(require,module,exports) {
+},{"_css_loader":12}],10:[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":10}],8:[function(require,module,exports) {
+},{"_css_loader":12}],6:[function(require,module,exports) {
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /*! jQuery v3.3.1 | (c) JS Foundation and other contributors | jquery.org/license */
@@ -2440,7 +2440,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return e.$ === w && (e.$ = Kt), t && e.jQuery === w && (e.jQuery = Jt), w;
   }, t || (e.jQuery = e.$ = w), w;
 });
-},{}],11:[function(require,module,exports) {
+},{}],13:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2475,7 +2475,7 @@ var Common = function () {
 }();
 
 exports.default = Common;
-},{"../vendors/jquery.min.js":8}],5:[function(require,module,exports) {
+},{"../vendors/jquery.min.js":6}],7:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2606,7 +2606,7 @@ var Top250page = function (_common) {
 }(_common3.default);
 
 exports.default = Top250page;
-},{"../vendors/jquery.min.js":8,"./common.js":11}],6:[function(require,module,exports) {
+},{"../vendors/jquery.min.js":6,"./common.js":13}],8:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2708,7 +2708,7 @@ var UsBoxPage = function (_common) {
 }(_common3.default);
 
 exports.default = UsBoxPage;
-},{"../vendors/jquery.min.js":8,"./common.js":11}],7:[function(require,module,exports) {
+},{"../vendors/jquery.min.js":6,"./common.js":13}],9:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2761,12 +2761,44 @@ var SearchPage = function (_common) {
             this.$btn.on('click', function () {
                 _this2.$content.empty();
                 var value = _this2.$input.val();
-                if (value === '') return;
-                _this2.getData(value, function (data) {
-                    _this2.render(data);
+
+                if (value === '') {
+                    _this2.$content.text('要输入搜索内容啊');return;
+                }
+                _this2.getData(value, function (result) {
+
+                    _this2.render(result.data);
                 });
             });
+            this.$input.on('keyup', function (e) {
+                console.log(e);
+                _this2.$content.empty();
+                var value = _this2.$input.val();
+                if (e.key === 'Enter') {
+                    if (value === '') {
+                        _this2.$content.text('要输入搜索内容啊');return;
+                    }
+                    _this2.getData(value, function (result) {
+                        console.log('dd', result);
+                        _this2.render(result.data);
+                    });
+                }
+            });
         }
+    }, {
+        key: 'createNode',
+        value: function createNode(subject, index) {
+            var $node = (0, _jqueryMin2.default)('<div class="item">\n        <a href="https://github.com/TryGhost/Ghost">\n          <div class="order"><span>1</span></div>\n          <div class="detail">\n            <h2>Ghost </h2>\n            <div class="description">Knockout makes it easier to create rich, responsive UIs with JavaScript</div>\n            <div class="extra"><span class="star-count">4196</span> star</div>  \n         </div>\n       </a>\n      </div> ');
+
+            $node.find('.order span').text(index);
+            $node.find('a').attr('href', subject.html_url);
+            $node.find('.detail h2').text(subject.name);
+            $node.find('.detail .description').text(subject.description);
+            $node.find('.detail .collection').text(subject.collect_count);
+            $node.find('.detail .star-count').text(subject.stargazers_count);
+            return $node;
+        }
+
         //jsonp请求
 
     }, {
@@ -2776,12 +2808,12 @@ var SearchPage = function (_common) {
 
             if (this.isLoading) return;
             this.isLoading = true;
+            this.page = 1;
             this.wrap.find('.loading').show();
+
             _jqueryMin2.default.ajax({
-                url: 'https://api.github.com/search/repositories?q=keyword+language:javascript&sort=stars&order=desc&page=1',
-                data: {
-                    q: keyword
-                },
+                url: 'https://api.github.com/search/repositories?q=' + keyword + '+language:javascript&sort=stars&order=desc',
+
                 dataType: 'jsonp'
             }).done(function (ret) {
                 console.log('ret');
@@ -2801,8 +2833,12 @@ var SearchPage = function (_common) {
         value: function render(data) {
             var _this4 = this;
 
-            data.subjects.forEach(function (item) {
-                _this4.$content.append(_this4.createNode(item));
+            if (data.total_count === 0) {
+                this.$content.text('没有找到相关内容');
+                return;
+            }
+            data.items.forEach(function (item, index) {
+                _this4.$content.append(_this4.createNode(item, index + 1));
             });
         }
     }]);
@@ -2811,7 +2847,7 @@ var SearchPage = function (_common) {
 }(_common3.default);
 
 exports.default = SearchPage;
-},{"../vendors/jquery.min.js":8,"./common.js":11}],2:[function(require,module,exports) {
+},{"../vendors/jquery.min.js":6,"./common.js":13}],4:[function(require,module,exports) {
 'use strict';
 
 require('../css/font.css');
@@ -2848,7 +2884,7 @@ var search = new _search2.default('#search');
 top.init();
 beimei.init();
 search.init();
-},{"../css/font.css":3,"../css/index.css":4,"../vendors/jquery.min.js":8,"./top250.js":5,"./beimei.js":6,"./search.js":7}],14:[function(require,module,exports) {
+},{"../css/font.css":5,"../css/index.css":10,"../vendors/jquery.min.js":6,"./top250.js":7,"./beimei.js":8,"./search.js":9}],20:[function(require,module,exports) {
 
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -2878,7 +2914,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '53777' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '58084' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -3017,5 +3053,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[14,2])
+},{}]},{},[20,4])
 //# sourceMappingURL=/app.d60da7eb.map

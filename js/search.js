@@ -12,25 +12,61 @@ class SearchPage extends common{
         this.bind()
     }
     bind(){
+        
         this.$btn.on('click',()=>{
             this.$content.empty()
             var value= this.$input.val()
-            if(value === '') return 
-            this.getData(value, (data)=>{
-                this.render(data)
+        
+            if(value === '') {this.$content.text('要输入搜索内容啊');  return} 
+            this.getData(value,(result)=>{
+               
+                this.render(result.data)
             })
         })
+        this.$input.on('keyup',(e)=>{
+            console.log(e)
+            this.$content.empty()
+            var value= this.$input.val()
+            if(e.key === 'Enter'){
+                if(value === '') {this.$content.text('要输入搜索内容啊');  return} 
+                this.getData(value,(result)=>{
+                    console.log('dd',result)
+                    this.render(result.data)
+                })
+            }
+        })
     }
+    createNode(subject,index){
+        var $node = $(`<div class="item">
+        <a href="https://github.com/TryGhost/Ghost">
+          <div class="order"><span>1</span></div>
+          <div class="detail">
+            <h2>Ghost </h2>
+            <div class="description">Knockout makes it easier to create rich, responsive UIs with JavaScript</div>
+            <div class="extra"><span class="star-count">4196</span> star</div>  
+         </div>
+       </a>
+      </div> `)
+        
+        $node.find('.order span').text(index)
+        $node.find('a').attr('href', subject.html_url)    
+        $node.find('.detail h2').text(subject.name)  
+        $node.find('.detail .description').text(subject.description)
+        $node.find('.detail .collection').text(subject.collect_count)  
+        $node.find('.detail .star-count').text(subject.stargazers_count ) 
+        return $node
+    }
+    
     //jsonp请求
     getData(keyword, callback) {
         if (this.isLoading) return
         this.isLoading = true
+        this.page = 1
         this.wrap.find('.loading').show()
+       
         $.ajax({
-            url: 'https://api.github.com/search/repositories?q=keyword+language:javascript&sort=stars&order=desc&page=1',
-            data:{
-                q: keyword 
-            },
+            url: `https://api.github.com/search/repositories?q=${keyword}+language:javascript&sort=stars&order=desc`,
+           
             dataType: 'jsonp'
         }).done((ret)=> {
             console.log('ret')
@@ -45,8 +81,12 @@ class SearchPage extends common{
     }
     //渲染
     render(data) {
-        data.subjects.forEach((item)=> {
-            this.$content.append(this.createNode(item))
+        if(data.total_count === 0){
+            this.$content.text('没有找到相关内容');
+            return
+        }
+        data.items.forEach((item, index)=> {
+            this.$content.append(this.createNode(item,index+1))
         })
     }
 }
